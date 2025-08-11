@@ -52,6 +52,17 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				// Robotics theme colors
+				electric: {
+					DEFAULT: 'hsl(var(--electric))',
+					bright: 'hsl(var(--electric-bright))',
+					dim: 'hsl(var(--electric-dim))'
+				},
+				neon: 'hsl(var(--neon-glow))',
+				surface: {
+					DEFAULT: 'hsl(var(--surface))',
+					elevated: 'hsl(var(--surface-elevated))'
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
