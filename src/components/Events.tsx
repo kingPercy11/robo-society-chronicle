@@ -1,9 +1,12 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, MapPin, Trophy, Users } from "lucide-react";
+import { Calendar, MapPin, Trophy, Users, ChevronLeft, ChevronRight } from "lucide-react";
+import { useState } from "react";
 
 const Events = () => {
+  const [currentEventIndex, setCurrentEventIndex] = useState(0);
+  
   const events = [
     {
       title: "RoboSoccer Championship",
@@ -66,6 +69,16 @@ const Events = () => {
     }
   };
 
+  const currentEvent = events[currentEventIndex];
+  
+  const nextEvent = () => {
+    setCurrentEventIndex((prev) => (prev + 1) % events.length);
+  };
+  
+  const prevEvent = () => {
+    setCurrentEventIndex((prev) => (prev - 1 + events.length) % events.length);
+  };
+
   return (
     <section id="events" className="py-20">
       <div className="container mx-auto px-4">
@@ -78,75 +91,123 @@ const Events = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {events.map((event, index) => (
-            <Card 
-              key={index}
-              className="gradient-card border-electric/20 hover:border-electric/40 transition-all duration-300 hover:shadow-electric group overflow-hidden"
-            >
-              <div className="relative overflow-hidden">
-                <img 
-                  src={event.image} 
-                  alt={event.title}
-                  className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className="absolute top-4 right-4">
-                  <Badge className={`${getDifficultyColor(event.difficulty)} font-medium`}>
-                    {event.difficulty}
-                  </Badge>
+        <div className="relative max-w-6xl mx-auto">
+          {/* Navigation Buttons */}
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10 flex flex-col gap-2">
+            {events.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentEventIndex(index)}
+                className={`w-4 h-16 rounded-sm border transition-all duration-300 ${
+                  index === currentEventIndex 
+                    ? 'bg-electric border-electric shadow-electric' 
+                    : 'bg-transparent border-electric/30 hover:border-electric/60'
+                }`}
+              >
+                <span className="sr-only">Event {index + 1}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Main Event Card */}
+          <div className="mx-16">
+            <Card className="gradient-card border-electric/20 overflow-hidden relative">
+              <div className="md:flex">
+                {/* Event Image */}
+                <div className="md:w-1/2 relative">
+                  <img 
+                    src={currentEvent.image} 
+                    alt={currentEvent.title}
+                    className="w-full h-64 md:h-96 object-cover"
+                  />
+                  <div className="absolute top-4 right-4">
+                    <Badge className={`${getDifficultyColor(currentEvent.difficulty)} font-medium`}>
+                      {currentEvent.difficulty}
+                    </Badge>
+                  </div>
+                  <div className="absolute top-4 left-4">
+                    <Badge className="bg-electric/20 text-electric border-electric/30">
+                      {currentEvent.category}
+                    </Badge>
+                  </div>
+                  
+                  {/* Prize Pool Overlay */}
+                  <div className="absolute top-1/2 left-6 -translate-y-1/2">
+                    <div className="text-electric text-sm font-medium mb-2 uppercase tracking-wider">
+                      PRIZES WORTH
+                    </div>
+                    <div className="text-electric text-3xl font-bold">
+                      {currentEvent.prize}
+                    </div>
+                  </div>
                 </div>
-                <div className="absolute top-4 left-4">
-                  <Badge className="bg-electric/20 text-electric border-electric/30">
-                    {event.category}
-                  </Badge>
+
+                {/* Event Details */}
+                <div className="md:w-1/2 p-8 flex flex-col justify-center">
+                  <div className="mb-6">
+                    <h3 className="text-3xl md:text-4xl font-bold text-electric mb-4">
+                      {currentEvent.title}
+                    </h3>
+                    <p className="text-muted-foreground text-lg leading-relaxed">
+                      {currentEvent.description}
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4 mb-6 text-sm">
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <Calendar className="w-4 h-4 text-electric" />
+                      <span>{currentEvent.date}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <MapPin className="w-4 h-4 text-electric" />
+                      <span>{currentEvent.location}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <Users className="w-4 h-4 text-electric" />
+                      <span>{currentEvent.participants}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <Trophy className="w-4 h-4 text-electric" />
+                      <span>{currentEvent.prize}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <Button 
+                      variant="outline"
+                      className="flex-1 border-electric/30 text-electric hover:bg-electric/10"
+                    >
+                      Learn More
+                    </Button>
+                    <Button 
+                      className="flex-1 gradient-primary text-background hover:shadow-electric"
+                    >
+                      Register Now
+                    </Button>
+                  </div>
                 </div>
               </div>
-
-              <CardHeader>
-                <CardTitle className="text-2xl text-electric group-hover:text-electric-bright transition-colors">
-                  {event.title}
-                </CardTitle>
-                <CardDescription className="text-muted-foreground">
-                  {event.description}
-                </CardDescription>
-              </CardHeader>
-
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Calendar className="w-4 h-4 text-electric" />
-                    <span>{event.date}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <MapPin className="w-4 h-4 text-electric" />
-                    <span>{event.location}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Users className="w-4 h-4 text-electric" />
-                    <span>{event.participants}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Trophy className="w-4 h-4 text-electric" />
-                    <span>{event.prize}</span>
-                  </div>
-                </div>
-
-                <div className="flex gap-2 pt-4">
-                  <Button 
-                    variant="outline"
-                    className="flex-1 border-electric/30 text-electric hover:bg-electric/10"
-                  >
-                    Learn More
-                  </Button>
-                  <Button 
-                    className="flex-1 gradient-primary text-background hover:shadow-electric"
-                  >
-                    Register Now
-                  </Button>
-                </div>
-              </CardContent>
             </Card>
-          ))}
+          </div>
+
+          {/* Navigation Arrows */}
+          <Button
+            onClick={prevEvent}
+            variant="outline"
+            size="icon"
+            className="absolute left-0 top-1/2 -translate-y-1/2 border-electric/30 text-electric hover:bg-electric/10 w-12 h-12"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </Button>
+          
+          <Button
+            onClick={nextEvent}
+            variant="outline"
+            size="icon"
+            className="absolute right-0 top-1/2 -translate-y-1/2 border-electric/30 text-electric hover:bg-electric/10 w-12 h-12"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </Button>
         </div>
 
         <div className="text-center mt-12">

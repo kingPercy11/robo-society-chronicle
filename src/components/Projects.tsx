@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { ExternalLink, Github } from "lucide-react";
 
 const Projects = () => {
@@ -80,73 +81,76 @@ const Projects = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
-            <Card 
-              key={index} 
-              className="gradient-card border-electric/20 hover:border-electric/40 transition-all duration-300 hover:shadow-electric group overflow-hidden"
-            >
-              <div className="relative overflow-hidden">
-                <img 
-                  src={project.image} 
-                  alt={project.title}
-                  className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className="absolute top-4 right-4">
-                  <Badge className={`${getStatusColor(project.status)} font-medium`}>
-                    {project.status}
-                  </Badge>
-                </div>
-                <div className="absolute top-4 left-4">
-                  <Badge variant="secondary" className="bg-background/80 text-foreground">
-                    {project.year}
-                  </Badge>
-                </div>
-              </div>
-              
-              <CardHeader>
-                <CardTitle className="text-xl text-electric group-hover:text-electric-bright transition-colors">
-                  {project.title}
-                </CardTitle>
-                <CardDescription className="text-muted-foreground">
-                  {project.description}
-                </CardDescription>
-              </CardHeader>
-              
-              <CardContent>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.technologies.map((tech, techIndex) => (
-                    <Badge 
-                      key={techIndex} 
-                      variant="outline"
-                      className="border-electric/30 text-electric/80 hover:bg-electric/10"
-                    >
-                      {tech}
-                    </Badge>
-                  ))}
-                </div>
-                
-                <div className="flex gap-2">
-                  <Button 
-                    size="sm" 
-                    variant="outline"
-                    className="flex-1 border-electric/30 text-electric hover:bg-electric/10"
-                  >
-                    <Github className="w-4 h-4 mr-2" />
-                    Code
-                  </Button>
-                  <Button 
-                    size="sm"
-                    className="flex-1 gradient-primary text-background hover:shadow-electric"
-                  >
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    Details
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <Carousel className="w-full max-w-5xl mx-auto">
+          <CarouselContent className="-ml-2 md:-ml-4">
+            {projects.map((project, index) => (
+              <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
+                <Card className="gradient-card border-electric/20 hover:border-electric/40 transition-all duration-300 hover:shadow-electric group overflow-hidden h-full">
+                  <div className="relative overflow-hidden">
+                    <img 
+                      src={project.image} 
+                      alt={project.title}
+                      className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                    <div className="absolute top-4 right-4">
+                      <Badge className={`${getStatusColor(project.status)} font-medium`}>
+                        {project.status}
+                      </Badge>
+                    </div>
+                    <div className="absolute top-4 left-4">
+                      <Badge variant="secondary" className="bg-background/80 text-foreground">
+                        {project.year}
+                      </Badge>
+                    </div>
+                  </div>
+                  
+                  <CardHeader>
+                    <CardTitle className="text-xl text-electric group-hover:text-electric-bright transition-colors">
+                      {project.title}
+                    </CardTitle>
+                    <CardDescription className="text-muted-foreground">
+                      {project.description}
+                    </CardDescription>
+                  </CardHeader>
+                  
+                  <CardContent>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.technologies.map((tech, techIndex) => (
+                        <Badge 
+                          key={techIndex} 
+                          variant="outline"
+                          className="border-electric/30 text-electric/80 hover:bg-electric/10"
+                        >
+                          {tech}
+                        </Badge>
+                      ))}
+                    </div>
+                    
+                    <div className="flex gap-2">
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        className="flex-1 border-electric/30 text-electric hover:bg-electric/10"
+                      >
+                        <Github className="w-4 h-4 mr-2" />
+                        Code
+                      </Button>
+                      <Button 
+                        size="sm"
+                        className="flex-1 gradient-primary text-background hover:shadow-electric"
+                      >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Details
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="border-electric/30 text-electric hover:bg-electric/10" />
+          <CarouselNext className="border-electric/30 text-electric hover:bg-electric/10" />
+        </Carousel>
       </div>
     </section>
   );
